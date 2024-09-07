@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<!-- saved from url=(0033)https://md.zoolab.org/s/bfn2gfh5Z -->
+<html lang="zh-TW"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    
+    
+    <meta name="description" content="# UP24 HW3 Due Date: 2024-06-03 [TOC]  ## Simple Instruction Level Debugger  In this homework, you h">
+    
+    <title>UP24 HW3 - CodiMD</title>
+    <link rel="icon" type="image/png" href="https://md.zoolab.org/favicon.png">
+    <link rel="apple-touch-icon" href="https://md.zoolab.org/apple-touch-icon.png">
+  
+    <link rel="stylesheet" href="./UP24 HW3 - CodiMD_files/emojify.min.css">
+    <link rel="stylesheet" href="./UP24 HW3 - CodiMD_files/font.css">
+    <link rel="stylesheet" href="./UP24 HW3 - CodiMD_files/fork-awesome.min.css">
+    <link href="./UP24 HW3 - CodiMD_files/pretty-styles-pack.css" rel="stylesheet"><link href="./UP24 HW3 - CodiMD_files/pretty-styles.css" rel="stylesheet"><link href="./UP24 HW3 - CodiMD_files/pretty.css" rel="stylesheet">
+  
+<style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 2px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 2px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: 1em}
+.MathJax_MenuRadioCheck.RTL {right: 1em; left: auto}
+.MathJax_MenuLabel {padding: 2px 2em 4px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #CCCCCC; margin: 4px 1px 0px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: Highlight; color: HighlightText}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover, .MJXp-munder {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > *, .MJXp-munder > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style></head>
+
+<body style=""><div id="MathJax_Message" style="display: none;"></div>
+    <div class="ui-infobar container-fluid unselectable hidden-print">
+        <small>
+            <span>
+                
+                    <span class="ui-lastchangeuser"> <i class="ui-user-icon small" style="background-image: url(https://www.gravatar.com/avatar/ba697a8cdef37153799f6a9016c0bdc6?s=96);" data-toggle="tooltip" data-placement="right" title="" data-original-title="up112"></i></span>
+                
+                &nbsp;<span class="text-uppercase ui-status-lastchange">changed</span>
+                <span class="ui-lastchange text-uppercase" data-createtime="Tue Apr 30 2024 07:44:45 GMT+0000 (Coordinated Universal Time)" data-updatetime="Mon Jun 03 2024 04:12:16 GMT+0000 (Coordinated Universal Time)" title="Mon, Jun 3, 2024 12:12 PM">4 hours ago</span>
+            </span>
+            <span class="pull-right">941 views <a href="https://md.zoolab.org/s/bfn2gfh5Z/edit" class="ui-edit" title="Edit this note"><i class="fa fa-fw fa-pencil"></i></a></span>
+            <br>
+            
+        </small>
+    </div>
+    <div id="doc" class="container markdown-body"><h1 class="" id="UP24-HW3"><a class="anchor hidden-xs" href="https://md.zoolab.org/s/bfn2gfh5Z#UP24-HW3" title="UP24-HW3" smoothhashscroll=""><i class="fa fa-link"></i></a>UP24 HW3</h1>
+<p>Due Date: 2024-06-03<br>
+</p><div class="toc"><ul>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#UP24-HW3" title="UP24 HW3" smoothhashscroll="">UP24 HW3</a><ul>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Simple-Instruction-Level-Debugger" title="Simple Instruction Level Debugger" smoothhashscroll="">Simple Instruction Level Debugger</a><ul>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Usage" title="Usage" smoothhashscroll="">Usage</a></li>
+</ul>
+</li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Commands-Requirements" title="Commands Requirements" smoothhashscroll="">Commands Requirements</a><ul>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Load-Program" title="Load Program" smoothhashscroll="">Load Program</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Disassemble" title="Disassemble" smoothhashscroll="">Disassemble</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Step-Instruction" title="Step Instruction" smoothhashscroll="">Step Instruction</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Continue" title="Continue" smoothhashscroll="">Continue</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Info-Registers" title="Info Registers" smoothhashscroll="">Info Registers</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Breakpoint" title="Breakpoint" smoothhashscroll="">Breakpoint</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Info-Breakpoints" title="Info Breakpoints" smoothhashscroll="">Info Breakpoints</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Delete-Breakpoints" title="Delete Breakpoints" smoothhashscroll="">Delete Breakpoints</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Patch-Memory" title="Patch Memory" smoothhashscroll="">Patch Memory</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#System-Call" title="System Call" smoothhashscroll="">System Call</a></li>
+</ul>
+</li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Examples" title="Examples" smoothhashscroll="">Examples</a><ul>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Example-1" title="Example 1" smoothhashscroll="">Example 1</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Example-2" title="Example 2" smoothhashscroll="">Example 2</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Example-3" title="Example 3" smoothhashscroll="">Example 3</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Example-4" title="Example 4" smoothhashscroll="">Example 4</a></li>
+</ul>
+</li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Homework-Submission" title="Homework Submission" smoothhashscroll="">Homework Submission</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Grading" title="Grading" smoothhashscroll="">Grading</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Demo" title="Demo" smoothhashscroll="">Demo</a></li>
+</ul>
+</li>
+</ul>
+</div><p></p>
+<h2 class="" id="Simple-Instruction-Level-Debugger"><a class="anchor hidden-xs" href="https://md.zoolab.org/s/bfn2gfh5Z#Simple-Instruction-Level-Debugger" title="Simple-Instruction-Level-Debugger" smoothhashscroll=""><i class="fa fa-link"></i></a>Simple Instruction Level Debugger</h2>
+<p>In this homework, you have to implement a simple instruction-level debugger that allows a user to debug a program interactively at the assembly instruction level. You should implement the debugger by using the <code>ptrace</code> interface in C/C++. The commands you have to implement are detailed in the <a href="https://md.zoolab.org/s/bfn2gfh5Z#Commands-Requirements" smoothhashscroll="">Commands Requirements</a>.</p>
+<ul>
+<li class="">
+<p>To simplify your implementation, your debugger only has to handle <strong>64-bit static-nopie</strong> programs on <strong>x86-64</strong>.</p>
+</li>
+<li class="">
+<p>We use the <a href="https://up.zoolab.org/unixprog/hw03/hw3_testing_program.zip" target="_blank" rel="noopener">sample program</a> to demonstrate how to use the debugger.</p>
+</li>
+</ul>
+<h3 class="" id="Usage"><a class="anchor hidden-xs" href="https://md.zoolab.org/s/bfn2gfh5Z#Usage" title="Usage" smoothhashscroll=""><i class="fa fa-link"></i></a>Usage</h3>
+<ul>
+<li class="">
+<p>You can load a program after/when the debugger starts. See the <a href="https://md.zoolab.org/s/bfn2gfh5Z#Load-Program" smoothhashscroll="">load program</a> section for the details.</p>
+</li>
+<li class="">
+<p>You should print “<code>(sdb) </code>” as the prompt in every line, no matter whether you have loaded the program.</p>
+</li>
+</ul>
+<pre><code class="bash hljs"><span class="hljs-comment"># Launch the debugger directly</span>
+./sdb
+<span class="hljs-comment"># Launch the debugger with a program</span>
+./sdb [program]
+</code></pre>
+<h2 class="" id="Commands-Requirements"><a class="anchor hidden-xs" href="https://md.zoolab.org/s/bfn2gfh5Z#Commands-Requirements" title="Commands-Requirements" smoothhashscroll=""><i class="fa fa-link"></i></a>Commands Requirements</h2>
+<div class="alert alert-info">
+<p>We will not test any error handling not mentioned in this spec. You can determine how to handle the other errors by yourself.</p>
+</div>
+<h3 class="" id="Load-Program"><a class="anchor hidden-xs" href="https://md.zoolab.org/s/bfn2gfh5Z#Load-Program" title="Load-Program" smoothhashscroll=""><i class="fa fa-link"></i></a>Load Program</h3>
+<ul>
+<li class="">
+<p>Command: <code>load [path to a program]</code></p>
+</li>
+<li class="">
+<p>Load a program after the debugger starts.</p>
+<ul>
+<li class="">You should output <code>** please load a program first.</code> if you input any other commands before loading a program.</li>
+</ul>
+</li>
+<li class="">
+<p>When the program is loaded:</p>
+<ul>
+<li class="">The debugger should print the <strong>name of the executable and the entry point address</strong>.</li>
+<li class="">Before waiting for the user’s input, the debugger should <strong>stop at the entry point</strong> and <strong>disassemble 5 instructions</strong> starting from the current program counter (rip).</li>
+</ul>
+</li>
+<li class="">
+<p>Sample output of <code>./sdb</code></p>
+</li>
+</ul>
+<pre><code>(sdb) info reg
+** please load a program first.
+(sdb) load ./hello
+** program './hello' loaded. entry point 0x401000.
+      401000: f3 0f 1e fa                     	endbr64   
+      401004: 55                              	push      rbp
+      401005: 48 89 e5                        	mov       rbp, rsp
+      401008: ba 0e 00 00 00                  	mov       edx, 0xe
+      40100d: 48 8d 05 ec 0f 00 00            	lea       rax, [rip + 0xfec]
+(sdb) 
+</code></pre>
+<ul>
+<li class="">Sample output of <code>./sdb ./hello</code></li>
+</ul>
+<pre><code>** program './hello' loaded. entry point 0x401000.
+      401000: f3 0f 1e fa                     	endbr64   
+      401004: 55                              	push      rbp
+      401005: 48 89 e5                        	mov       rbp, rsp
+      401008: ba 0e 00 00 00                  	mov       edx, 0xe
+      40100d: 48 8d 05 ec 0f 00 00            	lea       rax, [rip + 0xfec]
+(sdb)
+</code></pre>
+<h3 class="" id="Disassemble"><a class="anchor hidden-xs" href="https://md.zoolab.org/s/bfn2gfh5Z#Disassemble" title="Disassemble" smoothhashscroll=""><i class="fa fa-link"></i></a>Disassemble</h3>
+<p>When returning from execution, the debugger should disassemble 5 instructions starting from the current program counter (instruction pointer). The address of the 5 instructions should be within the range of the text section specified in the ELF file. We do not care about the format, but in each line, there should be:</p>
+<ol>
+<li class="">address, e.g. <code>401005</code></li>
+<li class="">raw instructions in a grouping of 1 byte, e.g., <code>48 89 e5</code></li>
+<li class="">mnemonic, e.g., <code>mov</code></li>
+<li class="">operands of the instruction, e.g., <code>edx, 0xe</code></li>
+</ol>
+<p>And make sure that</p>
+<ul>
+<li class="">The output is aligned with the columns.</li>
+<li class="">If the disassembled instructions are less than 5, output <code>** the address is out of the range of the text section.</code></li>
+</ul>
+<p>Sample output:</p>
+<pre><code>(sdb) si
+      401026: e8 10 00 00 00                    call      0x40103b
+      40102b: b8 01 00 00 00                    mov       eax, 1
+      401030: 0f 05                             syscall
+      401032: c3                                ret
+      401033: b8 00 00 00 00                    mov       eax, 0
+(sdb) si
+      40103b: b8 3c 00 00 00                    mov       eax, 0x3c
+      401040: 0f 05                             syscall
+** the address is out of the range of the text section.
+</code></pre>
+<div class="alert alert-info">
+<p><strong>Note:</strong></p>
+<ul>
+<li class="">You should only disassemble the program when the program is loaded or when using <code>si</code>, <code>cont</code> and <code>syscall</code> commands.</li>
+<li class="">If the <code>break</code> command <strong>sets a breakpoint</strong> using patched instructions like <code>0xcc</code> (int3), it should not appear in the output.</li>
+<li class="">If the <code>patch</code> command is used in the text section, the disassembled code should be the patched value, see the <a href="https://md.zoolab.org/s/bfn2gfh5Z#Patch-Memory" smoothhashscroll="">patch</a> section for examples.</li>
+</ul>
+</div>
+<div class="alert alert-info">
+<p><strong>Hint:</strong> You can link against the <code>capstone</code> library for disassembling.</p>
+</div>
+<h3 class="" id="Step-Instruction"><a class="anchor hidden-xs" href="https://md.zoolab.org/s/bfn2gfh5Z#Step-Instruction" title="Step-Instruction" smoothhashscroll=""><i class="fa fa-link"></i></a>Step Instruction</h3>
+<ul>
+<li class="">
+<p>Command: <code>si</code></p>
+</li>
+<li class="">
+<p>Execute a single instruction.</p>
+<ul>
+<li class="">If the program hits a breakpoint, output <code>** hit a breakpoint at [addr].</code></li>
+<li class="">If the program terminates, output <code>** the target program terminated.</code></li>
+</ul>
+</li>
+<li class="">
+<p>Sample output:</p>
+</li>
+</ul>
+<pre><code>(sdb) break 40103b
+** set a breakpoint at 0x40103b.
+(sdb) si
+** hit a breakpoint at 0x40103b.
+      40103b: b8 3c 00 00 00                    mov       eax, 0x3c
+      401040: 0f 05                             syscall
+** the address is out of the range of the text section.
+(sdb) si
+      401040: 0f 05                             syscall
+** the address is out of the range of the text section.
+(sdb) si
+** the target program terminated.
+</code></pre>
+<h3 class="" id="Continue"><a class="anchor hidden-xs" href="https://md.zoolab.org/s/bfn2gfh5Z#Continue" title="Continue" smoothhashscroll=""><i class="fa fa-link"></i></a>Continue</h3>
+<ul>
+<li class="">
+<p>Command: <code>cont</code></p>
+</li>
+<li class="">
+<p>Continue the execution of the target program. The program should keep running until it terminates or hits a breakpoint.</p>
+<ul>
+<li class="">If the program hits a breakpoint, output <code>** hit a breakpoint at [addr].</code></li>
+<li class="">If the program terminates, output <code>** the target program terminated.</code></li>
+</ul>
+</li>
+<li class="">
+<p>Sample output:</p>
+</li>
+</ul>
+<pre><code>(sdb) break 0x40100d
+** set a breakpoint at 0x40100d.
+(sdb) cont
+** hit a breakpoint at 0x40100d.
+      40100d: 48 8d 05 ec 0f 00 00              lea       rax, [rip + 0xfec]
+      401014: 48 89 c6                          mov       rsi, rax
+      401017: bf 01 00 00 00                    mov       edi, 1
+      40101c: e8 0a 00 00 00                    call      0x40102b
+      401021: bf 00 00 00 00                    mov       edi, 0
+(sdb) cont
+hello world!
+** the target program terminated.
+</code></pre>
+<div class="alert alert-info">
+<p><strong>Note:</strong> If your implementation of <code>cont</code> requires the use of <code>PTRACE_SINGLE_STEP</code> and <code>int3</code>, you can only utilize a maximum of <strong>two ptrace (PTRACE_SINGLE_STEP) and two int3</strong> in the implementation of <code>cont</code>, or you will receive 0 points.</p>
+</div>
+<h3 class="" id="Info-Registers"><a class="anchor hidden-xs" href="https://md.zoolab.org/s/bfn2gfh5Z#Info-Registers" title="Info-Registers" smoothhashscroll=""><i class="fa fa-link"></i></a>Info Registers</h3>
+<ul>
+<li class="">
+<p>Command: <code>info reg</code></p>
+</li>
+<li class="">
+<p>Show all the registers and their corresponding values in hex.</p>
+<ul>
+<li class="">You should output 3 registers in each line.</li>
+<li class="">Values should be printed in 64-bit hex format.</li>
+<li class=""><strong>Note:</strong> The output of <code>$rbp</code> and <code>$rsp</code> can be different.</li>
+</ul>
+</li>
+<li class="">
+<p>Sample output:</p>
+</li>
+</ul>
+<pre><code>(sdb) info reg
+$rax 0x0000000000000001    $rbx 0x0000000000000000    $rcx 0x0000000000000000
+$rdx 0x000000000000000e    $rsi 0x0000000000402000    $rdi 0x0000000000000001
+$rbp 0x00007ffdc479ab68    $rsp 0x00007ffdc479ab60    $r8  0x0000000000000000
+$r9  0x0000000000000000    $r10 0x0000000000000000    $r11 0x0000000000000000
+$r12 0x0000000000000000    $r13 0x0000000000000000    $r14 0x0000000000000000
+$r15 0x0000000000000000    $rip 0x0000000000401030    $eflags 0x0000000000000202
+</code></pre>
+<h3 class="" id="Breakpoint"><a class="anchor hidden-xs" href="https://md.zoolab.org/s/bfn2gfh5Z#Breakpoint" title="Breakpoint" smoothhashscroll=""><i class="fa fa-link"></i></a>Breakpoint</h3>
+<ul>
+<li class="">
+<p>Command: <code>break [hex address]</code></p>
+</li>
+<li class="">
+<p>Set up a break point at the specified address. The target program should stop before the instruction at the specified address is executed. If the user resumes the program with <code>si</code> , <code>cont</code> or <code>syscall</code>, the program should not stop at the same breakpoint twice.</p>
+<ul>
+<li class="">On success, output <code>** set a breakpoint at [hex address].</code></li>
+</ul>
+</li>
+<li class="">
+<p>Sample output:</p>
+</li>
+</ul>
+<pre><code>(sdb) break 0x401005
+** set a breakpoint at 0x401005.
+(sdb) break 40100d
+** set a breakpoint at 0x40100d.
+(sdb) si
+** hit a breakpoint at 0x401005.
+      401005: 48 89 e5                          mov       rbp, rsp
+      401008: ba 0e 00 00 00                    mov       edx, 0xe
+      40100d: 48 8d 05 ec 0f 00 00              lea       rax, [rip + 0xfec]
+      401014: 48 89 c6                          mov       rsi, rax
+      401017: bf 01 00 00 00                    mov       edi, 1
+(sdb) si
+      401008: ba 0e 00 00 00                    mov       edx, 0xe
+      40100d: 48 8d 05 ec 0f 00 00              lea       rax, [rip + 0xfec]
+      401014: 48 89 c6                          mov       rsi, rax
+      401017: bf 01 00 00 00                    mov       edi, 1
+      40101c: e8 0a 00 00 00                    call      0x40102b
+</code></pre>
+<div class="alert alert-info">
+<p><strong>Note:</strong> If you set a breakpoint at the address that current <code>$rip</code> points to, you should just go on next address after typing <code>si</code>, <code>cont</code> or <code>syscall</code> and <strong>do not</strong> output <code>** hit a breakpoint at [hex address].</code><br>
+This means that the program will not stop at the address that current <code>$rip</code> points to if you set a breakpoint on it.</p>
+</div>
+<h3 class="" id="Info-Breakpoints"><a class="anchor hidden-xs" href="https://md.zoolab.org/s/bfn2gfh5Z#Info-Breakpoints" title="Info-Breakpoints" smoothhashscroll=""><i class="fa fa-link"></i></a>Info Breakpoints</h3>
+<ul>
+<li class="">
+<p>Command: <code>info break</code></p>
+</li>
+<li class="">
+<p>List breakpoints with index numbers (for deletion) and addresses.</p>
+<ul>
+<li class="">The index of the breakpoints starts from <code>0</code>.</li>
+<li class="">If no breakpoints, output <code>** no breakpoints.</code></li>
+<li class="">If a breakpoint is deleted, the index of the other breakpoints should remain the same.</li>
+<li class=""><strong>Note:</strong> Also, if you add a new breakpoint, continue the indexing instead of filling the deleted index.</li>
+</ul>
+</li>
+<li class="">
+<p>Sample output:</p>
+</li>
+</ul>
+<pre><code>(sdb) info break
+** no breakpoints.
+(sdb) break 0x4000ba
+** set a breakpoint at 0x4000ba.
+(sdb) break 0x4000bf
+** set a breakpoint at 0x4000bf.
+(sdb) info break
+Num     Address
+0       0x4000ba
+1       0x4000bf
+(sdb) delete 0
+** delete breakpoint 0.
+(sdb) info break
+Num     Address
+1       0x4000bf
+</code></pre>
+<h3 class="" id="Delete-Breakpoints"><a class="anchor hidden-xs" href="https://md.zoolab.org/s/bfn2gfh5Z#Delete-Breakpoints" title="Delete-Breakpoints" smoothhashscroll=""><i class="fa fa-link"></i></a>Delete Breakpoints</h3>
+<ul>
+<li class="">
+<p>Command: <code>delete [id]</code></p>
+</li>
+<li class="">
+<p>Remove a break point with the specified id. The id is corresponding to the index number in <a href="https://md.zoolab.org/s/bfn2gfh5Z#Info-Breakpoints" smoothhashscroll="">Info Breakpoints</a>.</p>
+<ul>
+<li class="">On success, output <code>** delete breakpoint [id].</code></li>
+<li class="">If the breakpoint id does not exist, output <code>** breakpoint [id] does not exist.</code></li>
+</ul>
+</li>
+<li class="">
+<p>Sample output:</p>
+</li>
+</ul>
+<pre><code>(sdb) break 0x4000ba
+** set a breakpoint at 0x4000ba.
+(sdb) info break
+Num     Address
+0       0x4000ba
+(sdb) delete 0
+** delete breakpoint 0.
+(sdb) delete 0
+** breakpoint 0 does not exist.
+</code></pre>
+<h3 class="" id="Patch-Memory"><a class="anchor hidden-xs" href="https://md.zoolab.org/s/bfn2gfh5Z#Patch-Memory" title="Patch-Memory" smoothhashscroll=""><i class="fa fa-link"></i></a>Patch Memory</h3>
+<ul>
+<li class="">
+<p>Command: <code>patch [hex address] [hex value] [len]</code></p>
+</li>
+<li class="">
+<p>Patch memory starts at the <code>address</code> with the <code>value</code> of <code>len</code> bytes. The <code>value</code> will be integer value represented in hex and its length (in byte) is determined by the <code>len</code>, which can be either 1, 2, 4, or 8.</p>
+<ul>
+<li class="">On success, output <code>** patch memory at address [hex address].</code></li>
+</ul>
+</li>
+</ul>
+<div class="alert alert-info">
+<p><strong>Note:</strong></p>
+<ul>
+<li class="">If you patch on an instruction that has been set as a breakpoint, the breakpoint should still exist, but the original instruction should be patched.</li>
+<li class="">You don’t have to handle cases where the patch causes the program to crash. We just want to make sure that this function works. 🫶</li>
+</ul>
+</div>
+<ul>
+<li class="">Sample output:</li>
+</ul>
+<pre><code>(sdb) si
+      401017: bf 01 00 00 00                    mov       edi, 1
+      40101c: e8 0a 00 00 00                    call      0x40102b
+      401021: bf 00 00 00 00                    mov       edi, 0
+      401026: e8 10 00 00 00                    call      0x40103b
+      40102b: b8 01 00 00 00                    mov       eax, 1
+(sdb) patch 0x40101c 0x0090 2
+** patch memory at 0x40101c.
+(sdb) si
+      40101c: 90                                nop
+      40101d: 00 00                             add       byte ptr [rax], al
+      40101f: 00 00                             add       byte ptr [rax], al
+      401021: bf 00 00 00 00                    mov       edi, 0
+      401026: e8 10 00 00 00                    call      0x40103b
+(sdb) 
+</code></pre>
+<h3 class="" id="System-Call"><a class="anchor hidden-xs" href="https://md.zoolab.org/s/bfn2gfh5Z#System-Call" title="System-Call" smoothhashscroll=""><i class="fa fa-link"></i></a>System Call</h3>
+<ul>
+<li class="">
+<p>Command: <code>syscall</code></p>
+</li>
+<li class="">
+<p>The program execution should break at every system call instruction <strong>unless it hits a breakpoint</strong>.</p>
+<ul>
+<li class="">If it hits a breakpoint, output <code>** hit a breakpoint at [hex address].</code></li>
+<li class="">If it enters a syscall, output <code>** enter a syscall([nr]) at [hex address].</code></li>
+<li class="">If it leaves a syscall, output <code>** leave a syscall([nr]) = [ret] at [hex address].</code></li>
+</ul>
+</li>
+</ul>
+<div class="alert alert-info">
+<p><strong>Note:</strong> You can ignore the cases where a breakpoint is set on a syscall instruction.</p>
+</div>
+<ul>
+<li class="">Sample output:</li>
+</ul>
+<pre><code>(sdb) syscall
+** hit a breakpoint at 0x401008
+      401008: ba 0e 00 00 00                  	mov       edx, 0xe
+      40100d: 48 8d 05 ec 0f 00 00            	lea       rax, [rip + 0xfec]
+      401014: 48 89 c6                        	mov       rsi, rax
+      401017: bf 01 00 00 00                  	mov       edi, 1
+      40101c: e8 0a 00 00 00                  	call      0x40102b
+(sdb) syscall
+** enter a syscall(1) at 0x401030.
+      401030: 0f 05                           	syscall   
+      401032: c3                              	ret       
+      401033: b8 00 00 00 00                  	mov       eax, 0
+      401038: 0f 05                           	syscall   
+      40103a: c3                              	ret       
+(sdb) syscall
+hello world!
+** leave a syscall(1) = 14 at 0x401030.
+      401030: 0f 05                           	syscall   
+      401032: c3                              	ret       
+      401033: b8 00 00 00 00                  	mov       eax, 0
+      401038: 0f 05                           	syscall   
+      40103a: c3                              	ret 
+</code></pre>
+<h2 class="" id="Examples"><a class="anchor hidden-xs" href="https://md.zoolab.org/s/bfn2gfh5Z#Examples" title="Examples" smoothhashscroll=""><i class="fa fa-link"></i></a>Examples</h2>
+<p>We use the <a href="https://up.zoolab.org/unixprog/hw03/hw3_testing_program.zip" target="_blank" rel="noopener">sample program</a> to demonstrate the following examples.</p>
+<h3 class="" id="Example-1"><a class="anchor hidden-xs" href="https://md.zoolab.org/s/bfn2gfh5Z#Example-1" title="Example-1" smoothhashscroll=""><i class="fa fa-link"></i></a>Example 1</h3>
+<ul>
+<li class="">Requirements (basic): <code>load</code> <code>cont</code> <code>si</code> <code>disassemble</code></li>
+<li class="">Launch debugger: <code>./sdb</code></li>
+<li class="">Input:</li>
+</ul>
+<pre><code>si
+load ./hello
+si
+si
+cont
+</code></pre>
+<ul>
+<li class="">Sample:</li>
+</ul>
+<pre><code>(sdb) si
+** please load a program first.
+(sdb) load ./hello
+** program './hello' loaded. entry point 0x401000.
+      401000: f3 0f 1e fa                       endbr64
+      401004: 55                                push      rbp
+      401005: 48 89 e5                          mov       rbp, rsp
+      401008: ba 0e 00 00 00                    mov       edx, 0xe
+      40100d: 48 8d 05 ec 0f 00 00              lea       rax, [rip + 0xfec]
+(sdb) si
+      401004: 55                                push      rbp
+      401005: 48 89 e5                          mov       rbp, rsp
+      401008: ba 0e 00 00 00                    mov       edx, 0xe
+      40100d: 48 8d 05 ec 0f 00 00              lea       rax, [rip + 0xfec]
+      401014: 48 89 c6                          mov       rsi, rax
+(sdb) si
+      401005: 48 89 e5                          mov       rbp, rsp
+      401008: ba 0e 00 00 00                    mov       edx, 0xe
+      40100d: 48 8d 05 ec 0f 00 00              lea       rax, [rip + 0xfec]
+      401014: 48 89 c6                          mov       rsi, rax
+      401017: bf 01 00 00 00                    mov       edi, 1
+(sdb) cont
+hello world!
+** the target program terminated.
+</code></pre>
+<h3 class="" id="Example-2"><a class="anchor hidden-xs" href="https://md.zoolab.org/s/bfn2gfh5Z#Example-2" title="Example-2" smoothhashscroll=""><i class="fa fa-link"></i></a>Example 2</h3>
+<ul>
+<li class="">Requirements (basic): <code>break</code> <code>info break</code> <code>info reg</code></li>
+<li class="">Launch debugger: <code>./sdb ./hello</code></li>
+<li class="">Input:</li>
+</ul>
+<pre><code>break 0x401005
+break 40102b
+info break
+si
+si
+cont
+info reg
+cont
+</code></pre>
+<ul>
+<li class="">Sample:</li>
+</ul>
+<pre><code>** program './hello' loaded. entry point 0x401000.
+      401000: f3 0f 1e fa                     	endbr64   
+      401004: 55                              	push      rbp
+      401005: 48 89 e5                        	mov       rbp, rsp
+      401008: ba 0e 00 00 00                  	mov       edx, 0xe
+      40100d: 48 8d 05 ec 0f 00 00            	lea       rax, [rip + 0xfec]
+(sdb) break 0x401005
+** set a breakpoint at 0x401005.
+(sdb) break 40102b
+** set a breakpoint at 0x40102b.
+(sdb) info break
+Num	Address		
+0	0x401005
+1	0x40102b
+(sdb) si
+      401004: 55                              	push      rbp
+      401005: 48 89 e5                        	mov       rbp, rsp
+      401008: ba 0e 00 00 00                  	mov       edx, 0xe
+      40100d: 48 8d 05 ec 0f 00 00            	lea       rax, [rip + 0xfec]
+      401014: 48 89 c6                        	mov       rsi, rax
+(sdb) si
+** hit a breakpoint at 0x401005.
+      401005: 48 89 e5                        	mov       rbp, rsp
+      401008: ba 0e 00 00 00                  	mov       edx, 0xe
+      40100d: 48 8d 05 ec 0f 00 00            	lea       rax, [rip + 0xfec]
+      401014: 48 89 c6                        	mov       rsi, rax
+      401017: bf 01 00 00 00                  	mov       edi, 1
+(sdb) cont
+** hit a breakpoint at 0x40102b.
+      40102b: b8 01 00 00 00                  	mov       eax, 1
+      401030: 0f 05                           	syscall   
+      401032: c3                              	ret       
+      401033: b8 00 00 00 00                  	mov       eax, 0
+      401038: 0f 05                           	syscall   
+(sdb) info reg
+$rax 0x0000000000402000    $rbx 0x0000000000000000    $rcx 0x0000000000000000
+$rdx 0x000000000000000e    $rsi 0x0000000000402000    $rdi 0x0000000000000001
+$rbp 0x00007ffe0e5cd5b8    $rsp 0x00007ffe0e5cd5b0    $r8  0x0000000000000000
+$r9  0x0000000000000000    $r10 0x0000000000000000    $r11 0x0000000000000000
+$r12 0x0000000000000000    $r13 0x0000000000000000    $r14 0x0000000000000000
+$r15 0x0000000000000000    $rip 0x000000000040102b    $eflags 0x0000000000000202
+(sdb) cont
+hello world!
+** the target program terminated.
+</code></pre>
+<div class="alert alert-info">
+<p><strong>Note:</strong> The output of <code>$rbp</code> and <code>$rsp</code> can be different. Just make sure that <code>$rbp - $rsp</code> equals to <code>0x8</code>.</p>
+</div>
+<h3 class="" id="Example-3"><a class="anchor hidden-xs" href="https://md.zoolab.org/s/bfn2gfh5Z#Example-3" title="Example-3" smoothhashscroll=""><i class="fa fa-link"></i></a>Example 3</h3>
+<ul>
+<li class="">Requirements (advanced): <code>delete</code> <code>patch</code></li>
+<li class="">Launch debugger: <code>./sdb ./guess</code></li>
+<li class="">Input:</li>
+</ul>
+<pre><code>break 0x4010de
+cont
+1
+patch 0x4010e8 0x9090 2
+si
+info break
+delete 0
+break 0x4010ea
+delete 0
+info break
+cont
+patch 0x402015 0x4e49570a 4
+cont
+</code></pre>
+<ul>
+<li class="">Sample:</li>
+</ul>
+<pre><code>** program './guess' loaded. entry point 0x40108b.
+      40108b: f3 0f 1e fa                       endbr64
+      40108f: 55                                push      rbp
+      401090: 48 89 e5                          mov       rbp, rsp
+      401093: 48 83 ec 10                       sub       rsp, 0x10
+      401097: ba 12 00 00 00                    mov       edx, 0x12
+(sdb) break 0x4010de
+** set a breakpoint at 0x4010de.
+(sdb) cont
+guess a number &gt; 1
+** hit a breakpoint at 0x4010de.
+      4010de: 48 89 c7                          mov       rdi, rax
+      4010e1: e8 1a ff ff ff                    call      0x401000
+      4010e6: 85 c0                             test      eax, eax
+      4010e8: 75 1b                             jne       0x401105
+      4010ea: ba 06 00 00 00                    mov       edx, 6
+(sdb) patch 0x4010e8 0x9090 2
+** patch memory at address 0x4010e8.
+(sdb) si
+      4010e1: e8 1a ff ff ff                    call      0x401000
+      4010e6: 85 c0                             test      eax, eax
+      4010e8: 90                                nop
+      4010e9: 90                                nop
+      4010ea: ba 06 00 00 00                    mov       edx, 6
+(sdb) info break
+Num	Address		
+0	0x4010de
+(sdb) delete 0
+** delete breakpoint 0.
+(sdb) break 0x4010ea
+** set a breakpoint at 0x4010ea.
+(sdb) delete 0
+** breakpoint 0 does not exist.
+(sdb) info break
+Num	Address		
+1	0x4010ea
+(sdb) cont
+** hit a breakpoint at 0x4010ea.
+      4010ea: ba 06 00 00 00                    mov       edx, 6
+      4010ef: 48 8d 05 1f 0f 00 00              lea       rax, [rip + 0xf1f]
+      4010f6: 48 89 c6                          mov       rsi, rax
+      4010f9: bf 01 00 00 00                    mov       edi, 1
+      4010fe: e8 25 00 00 00                    call      0x401128
+(sdb) patch 0x402015 0x4e49570a 4
+** patch memory at address 0x402015.
+(sdb) cont
+
+WIN
+** the target program terminated.
+</code></pre>
+<h3 class="" id="Example-4"><a class="anchor hidden-xs" href="https://md.zoolab.org/s/bfn2gfh5Z#Example-4" title="Example-4" smoothhashscroll=""><i class="fa fa-link"></i></a>Example 4</h3>
+<ul>
+<li class="">Requirements (advanced): <code>syscall</code></li>
+<li class="">Launch debugger: <code>./sdb ./hello</code></li>
+<li class="">Input:</li>
+</ul>
+<pre><code>break 0x401005
+break 40102b
+cont
+syscall
+syscall
+syscall
+syscall
+syscall
+</code></pre>
+<ul>
+<li class="">Sample:</li>
+</ul>
+<pre><code>** program './hello' loaded. entry point 0x401000.
+      401000: f3 0f 1e fa                     	endbr64   
+      401004: 55                              	push      rbp
+      401005: 48 89 e5                        	mov       rbp, rsp
+      401008: ba 0e 00 00 00                  	mov       edx, 0xe
+      40100d: 48 8d 05 ec 0f 00 00            	lea       rax, [rip + 0xfec]
+(sdb) break 0x401005
+** set a breakpoint at 0x401005.
+(sdb) break 40102b
+** set a breakpoint at 0x40102b.
+(sdb) cont
+** hit a breakpoint at 0x401005.
+      401005: 48 89 e5                        	mov       rbp, rsp
+      401008: ba 0e 00 00 00                  	mov       edx, 0xe
+      40100d: 48 8d 05 ec 0f 00 00            	lea       rax, [rip + 0xfec]
+      401014: 48 89 c6                        	mov       rsi, rax
+      401017: bf 01 00 00 00                  	mov       edi, 1
+(sdb) syscall
+** hit a breakpoint at 0x40102b.
+      40102b: b8 01 00 00 00                  	mov       eax, 1
+      401030: 0f 05                           	syscall   
+      401032: c3                              	ret       
+      401033: b8 00 00 00 00                  	mov       eax, 0
+      401038: 0f 05                           	syscall   
+(sdb) syscall
+** enter a syscall(1) at 0x401030.
+      401030: 0f 05                           	syscall   
+      401032: c3                              	ret       
+      401033: b8 00 00 00 00                  	mov       eax, 0
+      401038: 0f 05                           	syscall   
+      40103a: c3                              	ret       
+(sdb) syscall
+hello world!
+** leave a syscall(1) = 14 at 0x401030.
+      401030: 0f 05                           	syscall   
+      401032: c3                              	ret       
+      401033: b8 00 00 00 00                  	mov       eax, 0
+      401038: 0f 05                           	syscall   
+      40103a: c3                              	ret       
+(sdb) syscall
+** enter a syscall(60) at 0x401040.
+      401040: 0f 05                           	syscall   
+** the address is out of the range of the text section.
+(sdb) syscall
+** the target program terminated.
+</code></pre>
+<h2 class="" id="Homework-Submission"><a class="anchor hidden-xs" href="https://md.zoolab.org/s/bfn2gfh5Z#Homework-Submission" title="Homework-Submission" smoothhashscroll=""><i class="fa fa-link"></i></a>Homework Submission</h2>
+<ul>
+<li class="">Due time: 2024-06-03 15:30</li>
+<li class="">Filename: <code>{studentID}_hw3.zip</code></li>
+<li class="">Format:</li>
+</ul>
+<pre><code>+---{studentID}_hw3
+|    Makefile
+|    sdb.c/sdb.cpp
+|    ...
+</code></pre>
+<h2 class="" id="Grading"><a class="anchor hidden-xs" href="https://md.zoolab.org/s/bfn2gfh5Z#Grading" title="Grading" smoothhashscroll=""><i class="fa fa-link"></i></a>Grading</h2>
+<ul>
+<li class="">
+<p>[40%] Your program has the correct output for all  <a href="https://md.zoolab.org/s/bfn2gfh5Z#Examples" smoothhashscroll="">example test cases</a>.</p>
+</li>
+<li class="">
+<p>[60%] We use <code>N</code> hidden test cases to evaluate your implementation. You get <code>60/N</code> points for each correct test case.</p>
+</li>
+</ul>
+<div class="alert alert-danger">
+<p>Plagiarism is not allowed. Any student who is caught plagiarizing will receive a zero. 🫵</p>
+</div>
+<h2 class="" id="Demo"><a class="anchor hidden-xs" href="https://md.zoolab.org/s/bfn2gfh5Z#Demo" title="Demo" smoothhashscroll=""><i class="fa fa-link"></i></a>Demo</h2>
+<ul>
+<li class="">Date: 2024-06-03</li>
+</ul>
+<div class="alert alert-warning">
+<p><a href="https://md.zoolab.org/s/KU9BK0vjz" target="_blank" rel="noopener">https://md.zoolab.org/s/KU9BK0vjz</a></p>
+</div>
+</div>
+    <div class="ui-toc dropup unselectable hidden-print" style="display: none; right: 368.8px;">
+        <div class="pull-right dropdown">
+            <a id="tocLabel" class="ui-toc-label btn btn-default" data-toggle="dropdown" href="https://md.zoolab.org/s/bfn2gfh5Z#" role="button" aria-haspopup="true" aria-expanded="false" title="Table of content">
+                <i class="fa fa-bars"></i>
+            </a>
+            <ul id="ui-toc" class="ui-toc-dropdown dropdown-menu" aria-labelledby="tocLabel"><div class="toc"><ul class="nav">
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#UP24-HW3" title="UP24 HW3" smoothhashscroll="">UP24 HW3</a><ul class="nav">
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Simple-Instruction-Level-Debugger" title="Simple Instruction Level Debugger" smoothhashscroll="">Simple Instruction Level Debugger</a><ul class="nav">
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Usage" title="Usage" smoothhashscroll="">Usage</a></li>
+</ul>
+</li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Commands-Requirements" title="Commands Requirements" smoothhashscroll="">Commands Requirements</a><ul class="nav">
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Load-Program" title="Load Program" smoothhashscroll="">Load Program</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Disassemble" title="Disassemble" smoothhashscroll="">Disassemble</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Step-Instruction" title="Step Instruction" smoothhashscroll="">Step Instruction</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Continue" title="Continue" smoothhashscroll="">Continue</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Info-Registers" title="Info Registers" smoothhashscroll="">Info Registers</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Breakpoint" title="Breakpoint" smoothhashscroll="">Breakpoint</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Info-Breakpoints" title="Info Breakpoints" smoothhashscroll="">Info Breakpoints</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Delete-Breakpoints" title="Delete Breakpoints" smoothhashscroll="">Delete Breakpoints</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Patch-Memory" title="Patch Memory" smoothhashscroll="">Patch Memory</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#System-Call" title="System Call" smoothhashscroll="">System Call</a></li>
+</ul>
+</li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Examples" title="Examples" smoothhashscroll="">Examples</a><ul class="nav">
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Example-1" title="Example 1" smoothhashscroll="">Example 1</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Example-2" title="Example 2" smoothhashscroll="">Example 2</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Example-3" title="Example 3" smoothhashscroll="">Example 3</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Example-4" title="Example 4" smoothhashscroll="">Example 4</a></li>
+</ul>
+</li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Homework-Submission" title="Homework Submission" smoothhashscroll="">Homework Submission</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Grading" title="Grading" smoothhashscroll="">Grading</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Demo" title="Demo" smoothhashscroll="">Demo</a></li>
+</ul>
+</li>
+</ul>
+</div></ul>
+        </div>
+    </div>
+    <div id="ui-toc-affix" class="ui-affix-toc ui-toc-dropdown unselectable hidden-print affix" data-spy="affix" style="left: 1102.2px;"><div class="toc"><ul class="nav">
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#UP24-HW3" title="UP24 HW3" smoothhashscroll="">UP24 HW3</a><ul class="nav">
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Simple-Instruction-Level-Debugger" title="Simple Instruction Level Debugger" smoothhashscroll="">Simple Instruction Level Debugger</a><ul class="nav">
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Usage" title="Usage" smoothhashscroll="">Usage</a></li>
+</ul>
+</li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Commands-Requirements" title="Commands Requirements" smoothhashscroll="">Commands Requirements</a><ul class="nav">
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Load-Program" title="Load Program" smoothhashscroll="">Load Program</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Disassemble" title="Disassemble" smoothhashscroll="">Disassemble</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Step-Instruction" title="Step Instruction" smoothhashscroll="">Step Instruction</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Continue" title="Continue" smoothhashscroll="">Continue</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Info-Registers" title="Info Registers" smoothhashscroll="">Info Registers</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Breakpoint" title="Breakpoint" smoothhashscroll="">Breakpoint</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Info-Breakpoints" title="Info Breakpoints" smoothhashscroll="">Info Breakpoints</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Delete-Breakpoints" title="Delete Breakpoints" smoothhashscroll="">Delete Breakpoints</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Patch-Memory" title="Patch Memory" smoothhashscroll="">Patch Memory</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#System-Call" title="System Call" smoothhashscroll="">System Call</a></li>
+</ul>
+</li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Examples" title="Examples" smoothhashscroll="">Examples</a><ul class="nav">
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Example-1" title="Example 1" smoothhashscroll="">Example 1</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Example-2" title="Example 2" smoothhashscroll="">Example 2</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Example-3" title="Example 3" smoothhashscroll="">Example 3</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Example-4" title="Example 4" smoothhashscroll="">Example 4</a></li>
+</ul>
+</li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Homework-Submission" title="Homework Submission" smoothhashscroll="">Homework Submission</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Grading" title="Grading" smoothhashscroll="">Grading</a></li>
+<li><a href="https://md.zoolab.org/s/bfn2gfh5Z#Demo" title="Demo" smoothhashscroll="">Demo</a></li>
+</ul>
+</li>
+</ul>
+</div></div>
+    
+
+
+
+<script src="./UP24 HW3 - CodiMD_files/mathjax-config-extra.js.下載"></script>
+
+<script src="./UP24 HW3 - CodiMD_files/MathJax.js.下載" defer=""></script>
+<script src="./UP24 HW3 - CodiMD_files/TeX-AMS-MML_HTMLorMML.js.下載" defer=""></script>
+<script src="./UP24 HW3 - CodiMD_files/Safe.js.下載" defer=""></script>
+<script src="./UP24 HW3 - CodiMD_files/config"></script><script src="./UP24 HW3 - CodiMD_files/common.1349a0316c4d8448fc8a.js.下載" defer="defer"></script><script src="./UP24 HW3 - CodiMD_files/pretty-pack.7d6d83ca1bdc20fcbeac.js.下載" defer="defer"></script>
+
+
+
+</body></html>
